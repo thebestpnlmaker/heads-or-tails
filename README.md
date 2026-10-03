@@ -5,7 +5,7 @@ A coin flip app that looks completely random… but isn't.
 ![Heads or Tails screenshots](screenshot.png)
 
 **▶️ [Play it in your browser](https://github.com/thebestpnlmaker/heads-or-tails/blob/main/heads-or-tails%20pc%20version.html)**
-**📱 [Download the Android APK](../../releases/latest)**
+**📱 [Download the Android APK](https://github.com/thebestpnlmaker/heads-or-tails/blob/main/heads-or-tails%20android%20version.apk)**
 
 ## The trick 🤫
 
