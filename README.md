@@ -4,8 +4,9 @@ A coin flip app that looks completely random… but isn't.
 
 ![Heads or Tails screenshots](screenshot.png)
 
-**▶️ [Play it in your browser](https://github.com/thebestpnlmaker/heads-or-tails/blob/main/heads-or-tails%20pc%20version.html)**
-**📱 [Download the Android APK](https://github.com/thebestpnlmaker/heads-or-tails/blob/main/heads-or-tails%20android%20version.apk)**
+**▶️ [Play it in your browser](https://thebestpnlmaker.github.io/heads-or-tails/)**
+**📲 Install it:** open the link above and tap "Install app" (or Chrome menu → Install app)
+**📱 [Download the Android APK](https://thebestpnlmaker.github.io/heads-or-tails/heads-or-tails.apk)**
 
 ## The trick 🤫
 
@@ -26,9 +27,11 @@ Need to look innocent? **Triple-tap the title** to switch to honest mode (truly 
 
 ## Install
 
-**Android:** download the APK from [Releases](../../releases/latest), open it, and allow installs from unknown sources if asked.
+**Easiest (Android, PC, Mac):** open the [web version](https://thebestpnlmaker.github.io/heads-or-tails/) in Chrome or Edge and tap **Install app**. You get an icon on your home screen or desktop, it opens full screen and works offline. No APK, no unknown sources.
 
-**iPhone / PC / anything else:** open the [web version](https://thebestpnlmaker.github.io/heads-or-tails/). On iPhone, tap Share then "Add to Home Screen" to get an app icon.
+**iPhone / iPad:** open the [web version](https://thebestpnlmaker.github.io/heads-or-tails/) in Safari, tap Share, then **Add to Home Screen**.
+
+**Android APK:** [download heads-or-tails.apk](https://thebestpnlmaker.github.io/heads-or-tails/heads-or-tails.apk), open it, and allow installs from unknown sources if asked. If your phone saves it as `.bin`, rename it to `.apk`.
 
 ## How it works 🛠️
 
@@ -69,6 +72,10 @@ Three quick taps on the title flip an `honest` variable. When it's on, the resul
 ### Language and coin picker
 
 Texts and coins are stored in small JavaScript objects, and the buttons just swap what's displayed. Your choices are saved with `localStorage` so the app remembers them. The buttons call `stopPropagation()` so tapping them never flips the coin.
+
+### Installable web app
+
+The site has a `manifest.webmanifest` (name, icons, colors) and a small service worker (`sw.js`) that caches the files, so browsers offer to install it like a real app and it works offline.
 
 ### The APK
 

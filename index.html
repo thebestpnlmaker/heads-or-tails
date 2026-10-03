@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="author" content="thebestpnlmaker">
 <meta name="theme-color" content="#0B3F2F">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-maskable-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Heads or Tails">
 <title>Heads or Tails</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&display=swap" rel="stylesheet">
@@ -66,6 +71,13 @@
   .result.show { opacity: 1; }
   .hint { margin: 0 0 .4rem; font-size: 1rem; opacity: .7; text-align: center; }
   .credit { margin: 0 0 1.2rem; font-size: .8rem; opacity: .45; letter-spacing: .02em; }
+  .install {
+    display: none; margin: 0 0 .8rem;
+    font: 700 .95rem "Bricolage Grotesque", system-ui, sans-serif;
+    color: #0B3F2F; background: var(--ivory); border: 0; border-radius: 999px;
+    padding: .6rem 1.2rem; cursor: pointer;
+  }
+  .install.show { display: inline-block; }
   .dot {
     position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); right: 10px;
     width: 4px; height: 4px; border-radius: 50%; background: var(--ivory); opacity: 0;
@@ -112,6 +124,7 @@
   </div>
   <div class="result" id="result">&nbsp;</div>
   <p class="hint" id="hint">Tap the screen to flip</p>
+  <button class="install" id="install" type="button">Install app</button>
   <p class="credit">by thebestpnlmaker</p>
   <div class="dot" id="dot"></div>
   <button class="lang" id="lang" type="button">FR</button>
@@ -127,12 +140,13 @@
   const langBtn = document.getElementById('lang');
   const hintEl = document.getElementById('hint');
   const pickBtn = document.getElementById('pick');
+  const installBtn = document.getElementById('install');
   const panel = document.getElementById('panel');
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const T = {
-    en: { title: 'Heads or Tails', hint: 'Tap the screen to flip', pile: 'Tails!', face: 'Heads!', other: 'FR', pick: 'Choose coin' },
-    fr: { title: 'Pile ou Face', hint: "Touche l'écran pour lancer", pile: 'Pile !', face: 'Face !', other: 'EN', pick: 'Choisir la pièce' }
+    en: { title: 'Heads or Tails', hint: 'Tap the screen to flip', pile: 'Tails!', face: 'Heads!', other: 'FR', pick: 'Choose coin', install: 'Install app' },
+    fr: { title: 'Pile ou Face', hint: "Touche l'écran pour lancer", pile: 'Pile !', face: 'Face !', other: 'EN', pick: 'Choisir la pièce', install: "Installer l'appli" }
   };
   // English by default, then remembers the choice
   let lang = 'en';
@@ -149,6 +163,7 @@
     langBtn.setAttribute('aria-label', lang === 'fr' ? 'Switch to English' : 'Passer en français');
     if (lastOutcome) resultEl.textContent = t[lastOutcome];
     pickBtn.setAttribute('aria-label', t.pick);
+    installBtn.textContent = t.install;
     panel.querySelectorAll('.opt').forEach(b => { b.querySelector('span').textContent = COINS[b.dataset.k][lang]; });
   }
   langBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
@@ -184,6 +199,27 @@
   }
   [pickBtn, panel].forEach(el => el.addEventListener('pointerdown', (e) => e.stopPropagation()));
   pickBtn.addEventListener('click', (e) => { e.stopPropagation(); panel.classList.toggle('open'); });
+  // ---- install as an app (shows only in browsers that support it, hidden once installed) ----
+  let installEvent = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    installEvent = e;
+    installBtn.classList.add('show');
+  });
+  installBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
+  installBtn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    if (!installEvent) return;
+    installEvent.prompt();
+    await installEvent.userChoice;
+    installEvent = null;
+    installBtn.classList.remove('show');
+  });
+  window.addEventListener('appinstalled', () => installBtn.classList.remove('show'));
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
   applyCoin();
   applyLang();
 
